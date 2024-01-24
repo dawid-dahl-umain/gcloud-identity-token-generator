@@ -10,6 +10,7 @@ This application is a local Node.js server designed to generate Google Cloud ide
 
 - Node.js and npm (Node Package Manager)
 - Google Cloud SDK (gcloud command-line tool)
+- Service account key with minimal permissions (e.g., `Cloud Run Invoker`), in JSON format, to be used in `.env.gcloud`. For the project `poc-erp-adapter`, the key is stored in its Google Cloud Secret Manager.
 - Bash (for running the shell script)
 
 ### Installing
@@ -30,59 +31,37 @@ This application is a local Node.js server designed to generate Google Cloud ide
 
 ### Local Use Only
 
-- This application is intended strictly for **local use**. It is crucial that you do not deploy or expose this application to external networks or the internet. Exposing it could lead to severe security vulnerabilities, especially since it involves sensitive credentials.
+- This application is intended strictly for **local use**. Do not deploy or expose this application to external networks or the internet to avoid severe security vulnerabilities.
 
-### .env.gcloud File Security:
+### .env.gcloud File Security
 
-- Ensure that `.env.gcloud` is included in your `.gitignore` file to avoid accidentally committing sensitive data.
-- Never expose the contents of the `.env.gcloud` file publicly. This file contains the service account JSON key, which is highly sensitive and must be kept confidential at all times.
-
-By adhering to these security practices, you help safeguard your sensitive credentials and reduce the risk of unauthorized access to your Google Cloud resources.
-
----
+- Include `.env.gcloud` in your `.gitignore` file to prevent committing sensitive data.
+- Never expose the contents of the `.env.gcloud` file publicly.
 
 ### Generating Identity Tokens
 
-The script `generate_gcloud_identity_token.sh` simplifies the process of generating a Google Cloud identity token.
-
-#### Prerequisites
-
-- Google Cloud SDK installed on your machine.
-- Service account key with minimal permissions (e.g., `Cloud Run Invoker`).
-- Service account key in JSON format, to be used in `.env.gcloud`. For the project `poc-erp-adapter`, the key is stored in it's Google Cloud Secret Manager.
-
-#### Setting up the Environment
-
 1. **Create a `.env.gcloud` File:**
+
    - Copy `.env.gcloud.example` to create a `.env.gcloud`.
    - Fill in `SERVICE_ACCOUNT_JSON` with your service account JSON details.
-   - Set `GCLOUD_IDENTITY_TOKEN_AUDIENCE` to the URL of the Cloud Run service that should be the audience.
+   - Set `GCLOUD_IDENTITY_TOKEN_AUDIENCE` to the URL of the Cloud Run service.
 
-#### Using the Script
-
-1. **Run the Script:**
+2. **Run the Script:**
 
    - Make the script executable: `chmod +x ./generate_gcloud_identity_token.sh`.
-   - Execute the script: `./generate_gcloud_identity_token.sh`.
-   - A new identity token will be generated and printed.
+   - Execute the script to generate and print a new identity token.
 
-2. **Token Usage:**
+3. **Token Usage:**
    - Use this token as a bearer token for authenticated API requests.
    - Tokens are short-lived and will expire, requiring regeneration.
 
 ### Running the Application
 
 - **Start the Server**
-
   ```sh
   npm start
   ```
-
-  This command starts the local server.
-
-- **Accessing the Token Generation Endpoint**
-  - Use a tool like Postman to navigate to `http://localhost:3000/generate-gcloud-identity-token`.
-  - The server will return a new Google Cloud identity token.
+  Access the token generation endpoint using a tool like Postman at `http://localhost:3000/generate-gcloud-identity-token`.
 
 ## Development
 
@@ -90,4 +69,4 @@ The script `generate_gcloud_identity_token.sh` simplifies the process of generat
   ```sh
   npm run dev
   ```
-  This starts the server with `nodemon`, automatically restarting on file changes.
+  Starts the server with `nodemon`, automatically restarting on file changes.
