@@ -38,8 +38,11 @@ fi
 TEMP_SA_FILE=$(mktemp)
 echo "${SERVICE_ACCOUNT_JSON}" > "${TEMP_SA_FILE}"
 
-# Activate the service account
-gcloud auth activate-service-account --key-file="$TEMP_SA_FILE"
+# Activate the service account and check for success
+if ! gcloud auth activate-service-account --key-file="$TEMP_SA_FILE" 2>/dev/null; then
+    echo "Failed to activate service account." >&2
+    exit 1
+fi
 
 # Capture the token and check for success
 token=$(gcloud auth print-identity-token --audiences="$GCLOUD_IDENTITY_TOKEN_AUDIENCE" 2> /dev/null)
