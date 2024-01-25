@@ -63,7 +63,7 @@ This application is a local Node.js server designed to generate Google Cloud ide
   ```
   Access the token generation endpoint using a tool like Postman at `http://localhost:9090/generate-gcloud-identity-token`.
 
-  If you have set everything up correctly the app will return a short-lived identity token to you, for use as a bearer token in the Authorization header of e.g. Postman.
+  If you have set everything up correctly the app will return a short-lived identity token to you, for use as a bearer token in the Authorization header of e.g. Postman requests to your secure Cloud Run container's API.
 
 ## Development
 
