@@ -2,7 +2,9 @@
 
 ## Description
 
-This application is a local Node.js server designed to generate Google Cloud identity tokens using a bash script. It's an efficient solution for developers working with Google Cloud services who need to frequently generate new identity tokens, especially useful for services like Postman.
+This application is a local Node.js server designed to generate Google Cloud identity tokens using a shell script. It's a solution for developers working with Google Cloud services who need to frequently generate new identity tokens, for services such as Postman.
+
+Not indended to be used in production, such as CI/CD pipelines. Use it for Google Cloud _development_. 
 
 ## Getting Started
 
@@ -72,3 +74,32 @@ This application is a local Node.js server designed to generate Google Cloud ide
   npm run dev
   ```
   Starts the server with `nodemon`, automatically restarting on file changes.
+
+## Postman Automated Token Setup
+
+Automate Google Cloud identity token generation in Postman using our server script for seamless API authentication. Please note that this method should not be used in production/in any CI/CD pipeline.
+
+#### Steps:
+
+1. Create a collection variable `GCLOUD_IDENTITY_TOKEN`.
+
+2. Add this "Before query" script to your queries:
+
+    ```javascript
+    pm.sendRequest(
+        "http://localhost:9090/generate-gcloud-identity-token",
+        (err, res) => {
+            if (err) {
+                console.log(err)
+            } else {
+                const token = res.json().token
+
+                pm.variables.set("GCLOUD_IDENTITY_TOKEN", token)
+            }
+        }
+    )
+    ```
+
+3. Use `{{GCLOUD_IDENTITY_TOKEN}}` as the bearer token in the Authorization header.
+
+These tokens are short-lived, so it not a big risk to create many of them.
