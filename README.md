@@ -77,7 +77,7 @@ Not indended to be used in production, such as CI/CD pipelines. Use it for Googl
 
 ## Postman Automated Token Setup
 
-Automate Google Cloud identity token generation in Postman using our server script for seamless API authentication. Please note that this method should not be used in production/in any CI/CD pipeline.
+Automate Google Cloud identity token generation in Postman using our server script for seamless API authentication.
 
 #### Steps:
 
