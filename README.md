@@ -4,7 +4,7 @@
 
 This application is a local Node.js server designed to generate Google Cloud identity tokens using a shell script. It's a solution for developers working with Google Cloud services who need to frequently generate new identity tokens, for services such as Postman.
 
-Not indended to be used in production, such as CI/CD pipelines. Use it for Google Cloud _development_. 
+Not indended to be used in production, such as CI/CD pipelines. Use it for Google Cloud _development_.
 
 ## Getting Started
 
@@ -13,7 +13,7 @@ Not indended to be used in production, such as CI/CD pipelines. Use it for Googl
 - Node.js and npm (Node Package Manager)
 - Google Cloud SDK (gcloud command-line tool)
 - Service account key with minimal permissions (e.g., `Cloud Run Invoker`), in JSON format, to be used in `.env.gcloud`. For the project `poc-erp-adapter`, the key is stored in its Google Cloud Secret Manager.
-- Bash (for running the shell script)
+- Bash or zsh (for running the shell script)
 
 ### Installing
 
@@ -37,6 +37,7 @@ Not indended to be used in production, such as CI/CD pipelines. Use it for Googl
 
 ### .env.gcloud File Security
 
+- You are responsible for handling the JSON key file. Keep it secret and safe at all times.
 - Include `.env.gcloud` in your `.gitignore` file to prevent committing sensitive data.
 - Never expose the contents of the `.env.gcloud` file publicly.
 
@@ -60,9 +61,11 @@ Not indended to be used in production, such as CI/CD pipelines. Use it for Googl
 ### Running the Application
 
 - **Start the Server**
+
   ```sh
   npm start
   ```
+
   Access the token generation endpoint using a tool like Postman at `http://localhost:9090/generate-gcloud-identity-token`.
 
   If you have set everything up correctly the app will return a short-lived identity token to you, for use as a bearer token in the Authorization header of e.g. Postman requests to your secure Cloud Run container's API.
@@ -85,20 +88,22 @@ Automate Google Cloud identity token generation in Postman using our server scri
 
 2. Add this "Before query" script to your queries:
 
-    ```javascript
-    pm.sendRequest(
-        "http://localhost:9090/generate-gcloud-identity-token",
-        (err, res) => {
-            if (err) {
-                console.log(err)
-            } else {
-                const token = res.json().token
+   ```javascript
+   pm.sendRequest(
+     "http://localhost:9090/generate-gcloud-identity-token",
+     (err, res) => {
+       if (err) {
+         console.log(err);
+       } else {
+         const token = res.json().token;
 
-                pm.variables.set("GCLOUD_IDENTITY_TOKEN", token)
-            }
-        }
-    )
-    ```
+         pm.variables.set("GCLOUD_IDENTITY_TOKEN", token);
+       }
+     }
+   );
+   ```
+
+Here we make a request to your local server to retrieve an identity token, which we can then use in step 3:
 
 3. Use `{{GCLOUD_IDENTITY_TOKEN}}` as the bearer token in the Authorization header.
 
