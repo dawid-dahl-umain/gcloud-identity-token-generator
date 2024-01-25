@@ -12,7 +12,7 @@ Not indended to be used in production, such as CI/CD pipelines. Use it for Googl
 
 - Node.js and npm (Node Package Manager)
 - Google Cloud SDK (gcloud command-line tool)
-- Service account key with minimal permissions (e.g., `Cloud Run Invoker`), in JSON format, to be used in `.env.gcloud`. For the project `poc-erp-adapter`, the key is stored in its Google Cloud Secret Manager.
+- Service account key with minimal permissions (e.g., `Cloud Run Invoker`), in JSON format, to be used in `.env.gcloud`. Keep this key file secret at all times, for example in Google Cloud Secret Manager.
 - Bash or zsh (for running the shell script)
 
 ### Installing
